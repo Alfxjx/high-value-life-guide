@@ -52,8 +52,20 @@ jobs:
           java-version: '17'
 
       - name: Set up Android SDK
-        # ubuntu-latest 预装 Android SDK（sdkmanager 在 PATH 里）；接受协议并确保所需组件在位
+        # runner 有预装 SDK 就直接用；没有则自装 cmdline-tools（不依赖第三方 action）
         run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"; command -v sdkmanager || true
+          if ! command -v sdkmanager >/dev/null 2>&1; then
+            echo "no preinstalled sdkmanager, installing cmdline-tools"
+            sudo mkdir -p /opt/android-sdk/cmdline-tools
+            curl -sSLo /tmp/cmdtools.zip https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+            sudo unzip -q /tmp/cmdtools.zip -d /opt/android-sdk/cmdline-tools
+            sudo mv /opt/android-sdk/cmdline-tools/cmdline-tools /opt/android-sdk/cmdline-tools/latest
+            echo "/opt/android-sdk/cmdline-tools/latest/bin" >> "$GITHUB_PATH"
+            echo "ANDROID_HOME=/opt/android-sdk" >> "$GITHUB_ENV"
+            echo "ANDROID_SDK_ROOT=/opt/android-sdk" >> "$GITHUB_ENV"
+            export PATH="/opt/android-sdk/cmdline-tools/latest/bin:$PATH"
+          fi
           yes | sdkmanager --licenses > /dev/null || true
           sdkmanager "platforms;android-35" "build-tools;34.0.0"
 
