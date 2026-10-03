@@ -21,10 +21,15 @@ jobs:
       - name: Fetch latest content
         run: ./scripts/fetch-content.sh
 
+      - name: Parse content into structured JSON
+        # 构建期把 index.html 解析成 content.json（只用 Python 3 标准库）
+        run: python3 scripts/parse_content.py
+
       - name: Check for content changes
         id: diff
+        # 解析结果也算内容：index.html 或 content.json 任一变化都视为有更新
         run: |
-          if git diff --quiet app/src/main/assets/index.html; then
+          if [ -z "$(git status --porcelain -- app/src/main/assets/index.html app/src/main/assets/content.json)" ]; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -36,7 +41,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add app/src/main/assets/index.html
+          git add app/src/main/assets/index.html app/src/main/assets/content.json
           git diff --cached --quiet || git commit -m "chore: update book content [skip ci]"
           git push
 
@@ -66,10 +71,12 @@ jobs:
 
       - name: Compute version
         id: version
+        # 与 app/build.gradle.kts 的本地规则一致：分钟级时间戳，单调递增
         run: |
-          VERSION_NAME=$(date +%Y.%m.%d)
+          VERSION_NAME="2.0.$(TZ=Asia/Shanghai date +%Y%m%d.%H%M)"
+          VERSION_CODE=$(( $(date +%s) / 60 - 29453760 ))
           echo "version_name=$VERSION_NAME" >> "$GITHUB_OUTPUT"
-          echo "version_code=${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+          echo "version_code=$VERSION_CODE" >> "$GITHUB_OUTPUT"
 
       - name: Build release APK
         run: >-
