@@ -52,7 +52,10 @@ jobs:
           java-version: '17'
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+        # ubuntu-latest 预装 Android SDK（sdkmanager 在 PATH 里）；接受协议并确保所需组件在位
+        run: |
+          yes | sdkmanager --licenses > /dev/null || true
+          sdkmanager "platforms;android-35" "build-tools;34.0.0"
 
       - name: Decode keystore and write local.properties
         env:

@@ -1,3 +1,4 @@
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -40,7 +41,8 @@ android {
 
     signingConfigs {
         val keystoreFile = localProps.getProperty("KEYSTORE_FILE")
-        if (keystoreFile != null) {
+        // CI 未配置签名 secrets 时会写出一个 0 字节的 keystore，此时跳过签名（构建验证用未签名包）
+        if (keystoreFile != null && File(keystoreFile).length() > 0) {
             create("release") {
                 storeFile = file(keystoreFile)
                 storePassword = localProps.getProperty("KEYSTORE_PASSWORD")
