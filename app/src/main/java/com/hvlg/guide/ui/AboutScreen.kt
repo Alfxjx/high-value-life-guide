@@ -97,8 +97,8 @@ fun AboutScreen(onBack: () -> Unit) {
             AboutSection(
                 title = "本 App",
                 body = "xujianxiang 制作的 Android 原生客户端：内容离线内置，提供侧边目录、收藏夹、阅读位置记忆、全文搜索与明暗主题。内容随上游每日自动更新并重打包。",
-                linkText = "github.com/xujianxiang（high-value-life-guide）",
-                linkUrl = "https://github.com/xujianxiang",
+                linkText = "github.com/Alfxjx/high-value-life-guide",
+                linkUrl = "https://github.com/Alfxjx/high-value-life-guide",
                 onOpenUrl = uriHandler::openUri,
             )
 

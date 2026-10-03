@@ -887,14 +887,16 @@ private fun SectionNavFooter(
     next: Section?,
     onOpen: (Section) -> Unit,
 ) {
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 18.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
+            .padding(horizontal = 16.dp, vertical = 14.dp),
     ) {
         if (prev != null) {
-            TextButton(onClick = { onOpen(prev) }) {
+            TextButton(
+                onClick = { onOpen(prev) },
+                modifier = Modifier.align(Alignment.Start),
+            ) {
                 Text(
                     "← 上一节：${prev.num}. ${prev.title}",
                     fontSize = 13.sp,
@@ -902,11 +904,12 @@ private fun SectionNavFooter(
                     overflow = TextOverflow.Ellipsis,
                 )
             }
-        } else {
-            Spacer(Modifier.width(1.dp))
         }
         if (next != null) {
-            TextButton(onClick = { onOpen(next) }) {
+            TextButton(
+                onClick = { onOpen(next) },
+                modifier = Modifier.align(Alignment.End),
+            ) {
                 Text(
                     "下一节：${next.num}. ${next.title} →",
                     fontSize = 13.sp,
