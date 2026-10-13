@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 书脊线从上往下画出来，稍晚于书本入场 -->
+<objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="700"
+    android:startOffset="550"
+    android:interpolator="@android:interpolator/decelerate_cubic"
+    android:propertyName="trimPathEnd"
+    android:valueFrom="0"
+    android:valueTo="1"
+    android:valueType="floatType" />

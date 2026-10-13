@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 书本整体：放大回弹就位（节奏放慢，配合约 2 秒的开屏停留） -->
+<objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="1000"
+    android:interpolator="@android:interpolator/overshoot"
+    android:propertyName="scaleX"
+    android:valueFrom="0.6"
+    android:valueTo="1"
+    android:valueType="floatType" />
